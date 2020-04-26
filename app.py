@@ -34,11 +34,8 @@ app = Flask(__name__,template_folder='templates')
 # Use joblib to load in the pre-trained model
 model = joblib.load(open('model/xgb.bin', 'rb'))
 
-reddit = praw.Reddit(client_id = "######",
-					client_secret = "#######",
-					user_agent = "#######",
-					username = "########",
-					password = "########")
+
+reddit = praw.Reddit(client_id='QPdCUgBcp4WinA', client_secret='HF-sKHVC5Os3gufVxWvzIKijNb4', user_agent='reddit-flair', username='reddit-flair', password='flair123')
 
 
 def prediction(url):
