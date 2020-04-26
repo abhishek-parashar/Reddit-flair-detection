@@ -1,6 +1,5 @@
 # Reddit Flair Detector
 
-A Reddit Flair Detector web application to detect flairs of India subreddit posts using Machine Learning algorithms. The application can be found live at [Reddit Flair Detector](https://flair-detector.herokuapp.com/).
 
 ### Structure
 
