@@ -109,6 +109,9 @@ I went through a lot of litrature and Youtube videos for the following task, the
 ### Inferences 
  There various iterferences as discussed in the [EDA notebook](https://github.com/abhishek-parashar/Reddit-flair-detection/blob/master/scripts/Exploratory_Data_Analysis.ipynb) from the results we can infer that combined features give the best result probably because of the larger word embeddings present. We can also infer that the title as a feature also provides better results this can be attributed to the fact that title mainly consists of the required words or embeddings that is, it is in line with the flairs. 
 
+### Declaration
+Since I am not that well versed in html, css I got the HTML and CSS sheets from here -https://github.com/krishnaik06/Deployment-flask
+
 
 ### References
 
