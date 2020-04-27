@@ -1,26 +1,33 @@
-# Reddit Flair Detector
-
-
+# Reddit-flair-detection
+This is a reddit flair detection repository developed using flask and python, it's live at https://flair-it-up.herokuapp.com/. 
 ### Structure
 
-The directory largely contains 2 ipython notebooks and 1 web directory:
+The directory contains web sub directories and a sub directory for hosting model and other scripts:
 
-1. [Data-Collection Notebook](https://github.com/divyanshuaggarwal/Reddit-Flair-Detector/blob/master/Reddit_Data_Collection.ipynb) contains all the code that was used to fetch data using PRAW API from reddit and adding it to the mongodb database using pymongo. It was the fetched back from the data base and pre-processed to add it into a CSV file to do the data analysis and build the machine learning model.
+1. [app.py](https://github.com/abhishek-parashar/Reddit-flair-detection/blob/master/app.py)The file which contains all the main backend operations of the website and used to run the flask server locally.
    
-2. [Exploratory Data Analysis Notebook](https://github.com/divyanshuaggarwal/Reddit-Flair-Detector/blob/master/Exploratory_Data_Analysis.ipynb) contains all the code that was used to analyse and visualize the data.
+2. [Procfile](https://github.com/abhishek-parashar/Reddit-flair-detection/blob/master/Procfile) for setting up heroku.
     
-3. [Flair-Detector Notebook](https://github.com/divyanshuaggarwal/Reddit-Flair-Detector/blob/master/Flair_Detection.ipynb) contains the code used to train various machine learning models and check the accuracy on different features.
- 
-4. [Website Directory](https://github.com/divyanshuaggarwal/Reddit-Flair-Detector/tree/master/website) the directory contains the flask implementation of the app,the requirements and procfile for heroku deployment. The detail of each file in the directory can be found in the readme.md file of the directory.
+3. [model](https://github.com/divyanshuaggarwal/Reddit-Flair-Detector/blob/master/Flair_Detection.ipynb) contains the saved model.
+
+4. [requirement.txt](https://github.com/abhishek-parashar/Reddit-flair-detection/blob/master/requirements.txt) contains all the dependencies.
+
+5. [templates](https://github.com/abhishek-parashar/Reddit-flair-detection/tree/master/templates) contains the html file.
+
+6. [static](https://github.com/abhishek-parashar/Reddit-flair-detection/tree/master/static) contains the css file.
+
+7. [nltk.txt](https://github.com/abhishek-parashar/Reddit-flair-detection/blob/master/nltk.txt) contains the nltk dependency.
+
+8. [Scripts](https://github.com/abhishek-parashar/Reddit-flair-detection/tree/master/scripts) the directory contains scripts for data extraction, model, expolatory data analysis and experiment log manager notebooks.
   
 ### Codebase
 
-The entire code has been developed using Python programming language, utilizing it's powerful text processing and machine learning modules. The application has been developed using Flask web framework and hosted on Heroku web server.
+The entire code has been developed using Python programming language and is hosted on Heroku. The analysis and model is developed using nltk library and various machine learning models, The website is developed using Flask. 
 
 ### How to run the project:
 
   1. Open the `Terminal`.
-  2. Clone the repository by entering `git clone https://github.com/divyanshuaggarwal/Reddit-Flair-Detector.git` and navigate into `website` directory by entering `cd website` in the terminal.
+  2. Clone the repository by entering `https://github.com/abhishek-parashar/Reddit-flair-detection`.
   3. Ensure that `Python3` and `pip` are installed on the system.
   4. Create a `virtualenv` by executing the following command: `virtualenv venv`.
   5. Activate the `venv` virtual environment by executing the follwing command: `source venv/bin/activate`.
@@ -30,7 +37,7 @@ The entire code has been developed using Python programming language, utilizing 
   
 ### Dependencies
 
-The following dependencies can be found in [requirements.txt](https://github.com/divyanshuaggarwal/Reddit-Flair-Detector/blob/master/website/requirements.txt):
+The following dependencies can be found in [requirements.txt](https://github.com/abhishek-parashar/Reddit-flair-detection/blob/master/requirements.txt):
 
   1. [praw](https://praw.readthedocs.io/en/latest/)
   2. [scikit-learn](https://scikit-learn.org/)
@@ -45,31 +52,7 @@ The following dependencies can be found in [requirements.txt](https://github.com
   
 ### Approach
 
-Going through various literatures available for text processing and suitable machine learning algorithms for text classification, I based my approach using [[2]](https://towardsdatascience.com/multi-class-text-classification-model-comparison-and-selection-5eb066197568) which described various machine learning models like Naive-Bayes, Linear SVM and Logistic Regression for text classification with code snippets. Along with this, I tried other models like Random Forest and Multi-Layer Perceptron for the task. I have obtained test accuracies on various scenarios which can be found in the next section.
-
-The approach taken for the task is as follows:
-
-  1. Collect 100 India subreddit data for each of the 12 flairs using `praw` module [[1]](http://www.storybench.org/how-to-scrape-reddit-with-python/) and [2](http://machineloveus.com/mining-reddit-data-or-links-to-33-python-cheat-sheets/).
-  2. The data includes *title, comments, body, url, author, score, id, time-created* and *number of comments*.
-  3. For **comments**, only top level comments (top 10) are considered in dataset and no sub-comments are present.
-  4. The ***title, comments*** and ***body*** are cleaned by removing bad symbols and stopwords using `nltk`.
-  5. Five types of features are considered for the the given task: 
-    a) Title
-    b) Comments
-    c) Urls
-    d) Body
-    e) Combining Title, Comments and Urls as one feature.
-  6. The dataset is split into **80% train** and **20% test** data using `train-test-split` of `scikit-learn`.
-  7. The dataset is then converted into a `Vector` and `TF-IDF` form.
-  8. Then, the following ML algorithms (using `scikit-learn` libraries) are applied on the dataset:
-    
-    a) Naive-Bayes
-    b) Linear Support Vector Machine
-    c) Logistic Regression
-    d) Random Forest
-    e) MLP
-    f) XGBoost
-   9. Training and Testing on the dataset showed the **XGBoost** showed the best testing accuracy of **94.4%** when trained on the combination of **Title + Comments + URL** feature.
+I went through a lot of litrature and Youtube videos for the following task, the resources can be seen in the resorces section. After going through these resources and tutorials. I collected data from reddit using Praw module. I used nltk to remove bad words and applied various machine learning models to it. Only top 10 comments were taken, I used TFID DICT VECTORIZER to convert to word embeddings. Finaly deployed it using Flask and Heroku. 
   
 ### Results
 
@@ -77,78 +60,74 @@ The approach taken for the task is as follows:
 
 | Machine Learning Algorithm | Test Accuracy     |
 | -------------              |:-----------------:|
-| Naive Bayes                | 0.8571428571      |
-| Linear SVM                 | 0.8995535714      |
-| Logistic Regression        | 0.8973214285      |
-| Random Forest              | **0.904017**      |
-| MLP                        | 0.8772321428      |
-| XGBoost                    | 0.8080357142      |
+| Linear SVM                 | 0.7418032786885246|
+| Logistic Regression        | **0.75409836**    |
+| Random Forest              | 0.7336065573770492|
+| MLP                        | 0.5327868852459017|
+| XGBoost                    | 0.7008196721311475|
 
 #### Body as Feature
 
 | Machine Learning Algorithm | Test Accuracy     |
 | -------------              |:-----------------:|
-| Naive Bayes                | 0.2678571428      |
-| Linear SVM                 | 0.3906250000      |
-| Logistic Regression        | **0.415178**      |
-| Random Forest              | 0.4084821428      |
-| MLP                        | 0.4107142857      |
-|XGBoost                     | 0.4218750000      |
+| Linear SVM                 | 0.3442622950819672|
+| Logistic Regression        | 0.3237704918032787|
+| Random Forest              | **0.3770491803**  |
+| MLP                        | 0.2663934426229508|
+|XGBoost                     | 0.3688524590163934|
 
 #### URL as Feature
 
 | Machine Learning Algorithm | Test Accuracy     |
 | -------------              |:-----------------:|
-| Naive Bayes                | 0.6919642857      |
-| Linear SVM                 | 0.810267857100    |
-| Logistic Regression        | 0.82142857142     |
-| Random Forest              | 0.8191964285      |
-| MLP                        | **0.8281250000**  |
-| XGBoost                    | 0.4799107142      |
+| Linear SVM                 | 0.2745901639344262|
+| Logistic Regression        | **0.3073770491**  |
+| Random Forest              | 0.2622950819672131|
+| MLP                        | 0.2254098360655737|
+| XGBoost                    | 0.2172131147540983|
 
 #### Comments as Feature
 
 | Machine Learning Algorithm | Test Accuracy     |
 | -------------              |:-----------------:|
-| Naive Bayes                | 0.7544642857      |
-| Linear SVM                 | 0.8660714285      |
-| Logistic Regression        | 0.8683035714      |
-| Random Forest              | **0.8928571428**  |
-| MLP                        | 0.8459821428      |
-| XGBoost                    | 0.8147321428      |
+| Linear SVM                 | 0.430327868852459 |
+| Logistic Regression        | 0.4344262295081967|
+| Random Forest              | **0.438524590163**|
+| MLP                        | 0.3073770491803279|
+| XGBoost                    | 0.4180327868852459|
 
 #### Title + Comments + URL as Feature
 
 | Machine Learning Algorithm | Test Accuracy     |
 | -------------              |:-----------------:|
-| Naive Bayes                | 0.8125000000      |
-| Linear SVM                 | 0.9285714285      |
-| Logistic Regression        | 0.933035714285714 |
-| Random Forest              | 0.94196428571     |
-| MLP                        | 0.8660714285      |
-| XGBoost                    | **0.944196**      |
+| Linear SVM                 | 0.7090163934426229|
+| Logistic Regression        | 0.7131147540983607|
+| Random Forest              | 0.7745901639344263|
+| MLP                        | 0.5532786885245902|
+| XGBoost                    | **0.8278688**     |
 
 ### Inferences 
- the tests shows that combined features i.e. Title + comments + URL shows the best accuracy while body shows the worst accuracy. Title as feature and comments as features are close runner ups, followed by URL. As machine learning models tries to detect specific words to identify the sentiment it makes sense because more the content means more information. Title as feature performing so well can be due to the fact the title consists of all the keywords to expect in the body, and comments can show a pattern on what topic the discussion is going on.
+ There various iterferences as discussed in the [EDA notebook](https://github.com/abhishek-parashar/Reddit-flair-detection/blob/master/scripts/Exploratory_Data_Analysis.ipynb) from the results we can infer that combined features give the best result probably because of the larger word embeddings present. We can also infer that the title as a feature also provides better results this can be attributed to the fact that title mainly consists of the required words or embeddings that is, it is in line with the flairs. 
 
 
 ### References
 
 #### 1. For data collection:
-1. http://machineloveus.com/mining-reddit-data-or-links-to-33-python-cheat-sheets/
-2. http://www.storybench.org/how-to-scrape-reddit-with-python/
-3. https://towardsdatascience.com/scraping-reddit-data-1c0af3040768
-4. https://api.mongodb.com/python/current/tutorial.html
+1. https://towardsdatascience.com/scraping-reddit-data-1c0af3040768
+2. https://api.mongodb.com/python/current/tutorial.html
 
 #### 2. For Building machine learning model:
 1. https://medium.com/themlblog/splitting-csv-into-train-and-test-data-1407a063dd74
 2. https://towardsdatascience.com/multi-class-text-classification-model-comparison-and-selection-5eb066197568
 3. https://medium.com/@robert.salgado/multiclass-text-classification-from-start-to-finish-f616a8642538
 4. https://www.analyticsvidhya.com/blog/2018/04/a-comprehensive-guide-to-understand-and-implement-text-classification-in-python/
+5. https://www.districtdatalabs.com/text-analytics-with-yellowbrick
+6. Applied AI course- https://www.appliedaicourse.com/
 
 #### 3.For Building the Website and Deploying it:
-1. https://medium.com/techkylabs/getting-started-with-python-flask-framework-part-1-a4931ce0ea13 (entire series)
-2. https://towardsdatascience.com/designing-a-machine-learning-model-and-deploying-it-using-flask-on-heroku-9558ce6bde7b
-3. https://www.freecodecamp.org/news/how-to-build-a-web-application-using-flask-and-deploy-it-to-the-cloud-3551c985e492/
-4. https://hackernoon.com/deploy-a-machine-learning-model-using-flask-da580f84e60c
-5. https://blog.cambridgespark.com/deploying-a-machine-learning-model-to-the-web-725688b851c7
+1.	https://towardsdatascience.com/designing-a-machine-learning-model-and-deploying-it-using-flask-on-heroku-9558ce6bde7b
+2.	https://towardsdatascience.com/deploying-a-deep-learning-model-on-heroku-using-flask-and-python-769431335f66
+3.	https://medium.com/analytics-vidhya/deploy-machinelearning-model-with-flask-and-heroku-2721823bb653
+4.	https://www.youtube.com/watch?v=UbCWoMf80PY
+5.	https://www.youtube.com/watch?v=mrExsjcvF4o
+6.	https://blog.cambridgespark.com/deploying-a-machine-learning-model-to-the-web-725688b851c7
