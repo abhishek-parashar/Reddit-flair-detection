@@ -1,5 +1,6 @@
 import pickle
 import logging
+import gensim
 import praw
 from praw.models import MoreComments
 import os
@@ -7,40 +8,36 @@ import flask
 from flask import Flask, flash, request,jsonify, json
 import json
 import joblib
-import numpy as np 
-import pandas as pd
-import re
-import nltk
-from nltk.corpus import stopwords
-import datetime as dt
-nltk.download('all')
-from bs4 import BeautifulSoup
+from gensim import utils
+import gensim.parsing.preprocessing as gsp
 
+filters = [
+		   gsp.strip_tags,
+		   gsp.strip_punctuation,
+		   gsp.strip_multiple_whitespaces,
+		   gsp.strip_numeric,
+		   gsp.remove_stopwords,
+		   gsp.strip_short,
+		   gsp.stem_text
+		  ]
 
-REPLACE_BY_SPACE_RE = re.compile('[/(){}\[\]\|@,;]')
-BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
-STOPWORDS = set(stopwords.words('english'))
-def text_cleaning(text):
-    text = BeautifulSoup(text, "lxml").text
-    text = text.lower()
-    text = REPLACE_BY_SPACE_RE.sub(' ', text)
-    text = BAD_SYMBOLS_RE.sub('', text)
-    text = ' '.join(word for word in text.split() if word not in STOPWORDS)
-    return text
-
-def string(value):
-    return str(value)
-
+def clean(s):
+	s = s.lower()
+	s = utils.to_unicode(s)
+	for f in filters:
+		s = f(s)
+	return s
 
 app = Flask(__name__,template_folder='templates')
 
 
-# loading the model 
+# Use joblib to load in the pre-trained model
 model = joblib.load(open('model/xgb.bin', 'rb'))
+
 
 reddit = praw.Reddit(client_id='QPdCUgBcp4WinA', client_secret='HF-sKHVC5Os3gufVxWvzIKijNb4', user_agent='reddit-flair', username='reddit-flair', password='flair123')
 
-# perdiction function
+
 def prediction(url):
 	submission = reddit.submission(url = url)
 	data = {}
@@ -59,31 +56,32 @@ def prediction(url):
 
 	data["comment"] = str(comment)
 
-	data['title'] = text_cleaning(str(data['title']))
-	data['body'] = text_cleaning(str(data['body']))
-	data['comment'] = text_cleaning(str(data['comment']))
+	data['title'] = clean(str(data['title']))
+	data['body'] = clean(str(data['body']))
+	data['comment'] = clean(str(data['comment']))
 
 	combined_features = data["title"] + data["comment"] + data["body"] + data["url"]
 
 	return model.predict([combined_features])
 
-# initialising flask api
+# Initialise the Flask app
 
-# Setting up the main route
+# Set up the main route
 @app.route('/', methods=['GET', 'POST'])
 def main():
 	if flask.request.method == 'GET':
-		# rendering for input
+		# Just render the initial form, to get input
 		return(flask.render_template('main.html'))
 
 	if flask.request.method == 'POST':
-		# Extracting  the input
+		# Extract the input
 		text = flask.request.form['url']
 
-		# model's prediction
+		# Get the model's prediction
 		flair = str(prediction(str(text)))
 
-		# Rendering the form again and reminding of the previous value
+		# Render the form again, but add in the prediction and remind user
+		# of the values they input before
 		return flask.render_template('main.html', original_input={'url':str(text)}, result=flair[2:-2])
 
 
